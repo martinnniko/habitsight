@@ -1,0 +1,1050 @@
+
+@import 'fonts&variables';
+@import 'mixins';
+@import 'reset';
+
+body {
+  font-family: $font-inter;
+  background-color: $color-white;
+  color: $color-dark-grey;
+  min-height: 100vh;
+}
+
+
+.hidden {
+  display: none !important;
+}
+
+// ── Navbar ───────────────────────────────────
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 64px;
+  background-color: $surface;
+  border-bottom: 1px solid $color-light-grey;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  .navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .logo {
+    font-family: $font-offside;
+    font-size: 40px;
+    color: $color-dark-grey;
+  }
+
+  .dark-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    input { display: none; }
+
+    .dark-toggle-track {
+      width: 52px;
+      height: 26px;
+      background-color: $color-light-grey;
+      border-radius: 999px;
+      position: relative;
+      transition: background-color 0.25s;
+    }
+
+    .dark-toggle-thumb {
+      width: 20px;
+      height: 20px;
+      background-color: $surface;
+      border-radius: 50%;
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      transition: transform 0.25s;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      svg, img {
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        transition: opacity 0.2s;
+      }
+
+      .icon-sun  { opacity: 1; }
+      .icon-moon { opacity: 0; }
+    }
+
+    input:checked ~ .dark-toggle-track {
+      background-color: #374151;
+
+      .dark-toggle-thumb {
+        transform: translateX(26px);
+
+        .icon-sun  { opacity: 0; }
+        .icon-moon { opacity: 1; }
+      }
+    }
+  }
+
+  .nav-auth {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-login {
+    padding: 7px 16px;
+    border-radius: 8px;
+    border: 1px solid $color-light-grey;
+    background: transparent;
+    font-size: 14px;
+    color: $color-dark-grey;
+    &:hover { background-color: $surface-alt; }
+  }
+
+  .btn-signup {
+    padding: 7px 16px;
+    border-radius: 8px;
+    background-color: $color-green;
+    color: $color-white;
+    font-size: 14px;
+    font-weight: 600;
+    &:hover { background-color: $color-green-hover; }
+  }
+
+  .nav-profile {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 8px;
+    &:hover { background-color: $surface-alt; }
+  }
+
+  .avatar-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid $color-light-grey;
+    background-color: $surface-alt;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg { width: 18px; height: 18px; color: $color-grey; }
+  }
+
+  .profile-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: $color-dark-grey;
+  }
+
+  .caret {
+    font-size: 11px;
+    color: $color-grey;
+  }
+
+  .profile-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background-color: $surface;
+    border: 1px solid $color-light-grey;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    min-width: 140px;
+    overflow: hidden;
+    z-index: 50;
+
+    button {
+      width: 100%;
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 14px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: $color-dark-grey;
+      &:hover { background-color: $surface-alt; }
+      &.danger { color: #DC2626; &:hover { background-color: #FEF2F2; } }
+    }
+  }
+}
+
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px;
+}
+
+h1, h2 {
+  font-family: $font-jakarta;
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  line-height: 1.25;
+}
+
+.green {
+  color: $color-green;
+}
+
+// ── Habits Card ──────────────────────────────
+.habits-card {
+  background-color: $surface;
+  border: 1px solid $color-light-grey;
+  border-radius: 20px;
+  padding: 8px 0 16px;
+}
+
+.habit-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 22px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $surface-alt;
+  }
+
+  &.done {
+    .habit-checkbox {
+      background-color: $color-green;
+      border-color: $color-green;
+
+      svg {
+        display: block;
+      }
+    }
+
+    .habit-label {
+      color: $color-grey;
+      text-decoration: line-through;
+    }
+  }
+}
+
+.habit-checkbox {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border-radius: 6px;
+  border: 1px solid $color-light-grey;
+  background-color: $surface-alt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    border-color: $color-green;
+  }
+
+  svg {
+    display: none;
+    width: 12px;
+    height: 12px;
+  }
+}
+
+.habit-label {
+  font-size: 14px;
+  color: $color-dark-grey;
+  flex: 1;
+}
+
+.habit-remove {
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: $color-grey;
+  padding: 4px 8px;
+  border-radius: 6px;
+  opacity: 1;
+  transition: color 0.15s, background-color 0.15s;
+  cursor: pointer;
+
+  &:hover {
+    color: #DC2626;
+    background-color: #FEE2E2;
+  }
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px 0;
+  border-top: 1px solid $color-light-grey;
+  margin-top: 8px;
+}
+
+.btn-new-habit {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: $color-grey;
+  border: 1px solid $color-light-grey;
+  border-radius: 8px;
+  padding: 7px 14px;
+  background: transparent;
+
+  &:hover {
+    color: $color-green;
+    border-color: $color-green;
+    background-color: $color-green-light;
+  }
+}
+
+.count-badge {
+  font-size: 12px;
+  color: $color-grey;
+  background-color: $surface-alt;
+  border: 1px solid $color-light-grey;
+  padding: 4px 11px;
+  border-radius: 999px;
+}
+
+// ── Cards ────────────────────────────────────
+.card {
+  background-color: $surface;
+  border: 1px solid $color-light-grey;
+  border-radius: 20px;
+  padding: 20px 22px;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-family: $font-jakarta;
+  font-size: 14px;
+  font-weight: 600;
+  color: $color-dark-grey;
+  margin-bottom: 4px;
+}
+
+.card-subtitle {
+  font-size: 12px;
+  color: $color-grey;
+  margin-bottom: 14px;
+}
+
+// ── Streak Calendar ───────────────────────────
+#streak-calendar {
+  .cal-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .cal-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: $color-dark-grey;
+  }
+
+  .cal-prev,
+  .cal-next {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid $color-light-grey;
+    background: transparent;
+    color: $color-grey;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $surface-alt;
+      color: $color-dark-grey;
+    }
+  }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+
+  .cal-day-name {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: $color-grey;
+    text-transform: uppercase;
+    padding: 4px 0 8px;
+  }
+
+  .cal-day {
+    text-align: center;
+    font-size: 12px;
+    color: $color-grey;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin: 0 auto;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $surface-alt;
+    }
+
+    &.streak {
+      background-color: $color-green;
+      color: $surface;
+      font-weight: 600;
+    }
+
+    &.today {
+      background-color: $color-dark-grey;
+      color: $surface;
+      font-weight: 600;
+    }
+
+    &.today.streak {
+      background-color: $color-dark-grey;
+    }
+
+    &.cal-empty {
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+}
+
+// ── Bar Chart ────────────────────────────────
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 100px;
+  margin-bottom: 8px;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient($color-light-grey 1px, transparent 1px),
+      linear-gradient($color-light-grey 1px, transparent 1px),
+      linear-gradient($color-light-grey 1px, transparent 1px),
+      linear-gradient($color-light-grey 1px, transparent 1px),
+      linear-gradient($color-light-grey 1px, transparent 1px);
+    background-size: 100% 20%, 100% 20%, 100% 20%, 100% 20%, 100% 20%;
+    background-position: 0 0%, 0 25%, 0 50%, 0 75%, 0 100%;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+.bar-col {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 3px;
+  position: relative;
+  z-index: 1;
+}
+
+.bar-fill {
+  border-radius: 4px 4px 2px 2px;
+  background-color: $color-green;
+}
+
+.bar-empty {
+  flex: 1;
+  border-radius: 4px 4px 2px 2px;
+  background-color: $surface-alt;
+}
+
+.bar-labels {
+  display: flex;
+  gap: 6px;
+
+  span {
+    flex: 1;
+    text-align: center;
+    font-size: 11px;
+    color: $color-grey;
+  }
+}
+
+// ── Modals ───────────────────────────────────
+.modal-bg {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(31, 41, 55, 0.4);
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+
+  &.open {
+    display: flex;
+  }
+}
+
+.modal-box {
+  background-color: $surface;
+  border-radius: 20px;
+  border: 1px solid $color-light-grey;
+  padding: 28px 26px;
+  width: 360px;
+
+  h3 {
+    font-family: $font-jakarta;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+}
+
+.input-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: $color-dark-grey;
+  margin-bottom: 5px;
+}
+
+.modal-box input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid $color-light-grey;
+  border-radius: 8px;
+  font-family: $font-inter;
+  font-size: 14px;
+  background-color: $surface-alt;
+  outline: none;
+  margin-bottom: 14px;
+  color: $color-dark-grey;
+
+  &:focus {
+    border-color: $color-green;
+    background-color: $surface;
+  }
+
+  &::placeholder {
+    color: $color-grey;
+  }
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.modal-error {
+  font-size: 13px;
+  color: #DC2626;
+  margin-bottom: 10px;
+}
+
+.modal-switch {
+  text-align: center;
+  font-size: 13px;
+  color: $color-grey;
+  margin-top: 14px;
+
+  a {
+    color: $color-green;
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.btn-cancel {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid $color-light-grey;
+  font-size: 13px;
+  color: $color-grey;
+  background: transparent;
+
+  &:hover {
+    background-color: $surface-alt;
+  }
+}
+
+.btn-confirm {
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  background-color: $color-green;
+  color: $color-white;
+
+  &:hover {
+    background-color: $color-green-hover;
+  }
+}
+
+// ── Footer ────────────────────────────────────
+.footer {
+  border-top: 1px solid $color-light-grey;
+  margin-top: 48px;
+  padding: 0 48px;
+
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 0 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .footer-logo {
+    font-family: $font-offside;
+    font-size: 18px;
+    font-weight: 600;
+    color: $color-dark-grey;
+  }
+
+  .footer-tagline {
+    font-size: 13px;
+    color: $color-grey;
+    max-width: 200px;
+    line-height: 1.5;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 48px;
+  }
+
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-col-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: $color-dark-grey;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .footer-col a {
+    font-size: 13px;
+    color: $color-grey;
+    text-decoration: none;
+
+    &:hover {
+      color: $color-green;
+    }
+  }
+
+  .footer-bottom {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 0;
+    border-top: 1px solid $color-light-grey;
+
+    span {
+      font-size: 12px;
+      color: $color-grey;
+    }
+  }
+}
+
+// ── Responsive ───────────────────────────────
+@include media-down("m") {
+  .navbar {
+    padding: 0 16px;
+  }
+
+  .dashboard {
+    grid-template-columns: 1fr;
+    padding: 24px 16px;
+  }
+
+  .footer {
+    padding: 0 16px;
+
+    .footer-inner {
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .footer-links {
+      gap: 32px;
+    }
+  }
+}
+
+// ── Journal ───────────────────────────────────
+.journal-section {
+  margin-top: 32px;
+}
+
+.journal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+
+  h2 {
+    margin-bottom: 0;
+  }
+}
+
+.btn-new-entry {
+  font-size: 13px;
+  color: $color-grey;
+  border: 1px solid $color-light-grey;
+  border-radius: 8px;
+  padding: 7px 14px;
+  background: transparent;
+  cursor: pointer;
+
+  &:hover {
+    color: $color-green;
+    border-color: $color-green;
+    background-color: $color-green-light;
+  }
+}
+
+.journal-editor {
+  background-color: $surface;
+  border: 1px solid $color-light-grey;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.journal-title-input {
+  width: 100%;
+  font-family: $font-jakarta;
+  font-size: 16px;
+  font-weight: 600;
+  color: $color-dark-grey;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid $color-light-grey;
+  padding: 0 0 10px;
+  margin-bottom: 12px;
+  outline: none;
+
+  &::placeholder {
+    color: $color-light-grey;
+  }
+}
+
+.journal-textarea {
+  width: 100%;
+  min-height: 120px;
+  font-family: $font-inter;
+  font-size: 14px;
+  color: $color-dark-grey;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: vertical;
+  line-height: 1.6;
+
+  &::placeholder {
+    color: $color-light-grey;
+  }
+}
+
+.journal-editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid $color-light-grey;
+}
+
+.journal-empty {
+  font-size: 14px;
+  color: $color-grey;
+  padding: 16px 0;
+}
+
+.journal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.journal-entry {
+  background-color: $surface;
+  border: 1px solid $color-light-grey;
+  border-radius: 16px;
+  padding: 18px 20px;
+
+  .entry-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .entry-title {
+    font-family: $font-jakarta;
+    font-size: 15px;
+    font-weight: 600;
+    color: $color-dark-grey;
+  }
+
+  .entry-date {
+    font-size: 11px;
+    color: $color-grey;
+    white-space: nowrap;
+    margin-left: 12px;
+  }
+
+  .entry-body {
+    font-size: 13px;
+    color: $color-grey;
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+
+  .entry-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .btn-edit-entry {
+    font-size: 12px;
+    color: $color-grey;
+    border: 1px solid $color-light-grey;
+    border-radius: 6px;
+    padding: 4px 10px;
+    background: transparent;
+    cursor: pointer;
+
+    &:hover {
+      color: $color-dark-grey;
+      background-color: $surface-alt;
+    }
+  }
+
+  .btn-delete-entry {
+    font-size: 12px;
+    color: $color-grey;
+    border: 1px solid $color-light-grey;
+    border-radius: 6px;
+    padding: 4px 10px;
+    background: transparent;
+    cursor: pointer;
+
+    &:hover {
+      color: #DC2626;
+      background-color: #FEE2E2;
+      border-color: #FCA5A5;
+    }
+  }
+}
+
+// ── Profile dropdown dark mode button ─────────
+.navbar .profile-dropdown button {
+  width: 100%;
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 14px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: $color-dark-grey;
+
+  &:hover {
+    background-color: $surface-alt;
+  }
+
+  &.danger {
+    color: #DC2626;
+
+    &:hover {
+      background-color: #FEF2F2;
+    }
+  }
+}
+
+// ── Dark mode ─────────────────────────────────
+body.dark {
+  background-color: #111827;
+  color: #F9FAFB;
+
+  .navbar {
+    background-color: #1F2937;
+    border-bottom-color: #374151;
+
+    .logo { color: #F9FAFB; }
+    .btn-login { color: #F9FAFB; border-color: #374151; }
+    .btn-login:hover { background-color: #374151; }
+    .profile-name { color: #F9FAFB; }
+    .avatar-icon { background-color: #374151; border-color: #4B5563; }
+    .profile-btn:hover { background-color: #374151; }
+    .dark-toggle .dark-toggle-track { background-color: #374151; }
+    .dark-toggle input:checked ~ .dark-toggle-track { background-color: #4B5563; }
+    .dark-toggle .dark-toggle-thumb { background-color: #F9FAFB; }
+
+    .profile-dropdown {
+      background-color: #1F2937;
+      border-color: #374151;
+
+      button {
+        color: #F9FAFB;
+        &:hover { background-color: #374151; }
+        &.danger { color: #F87171; &:hover { background-color: #450a0a; } }
+      }
+    }
+  }
+
+  h1, h2 { color: #F9FAFB; }
+  .green { color: #34D399; }
+
+  .habits-card {
+    background-color: #1F2937;
+    border-color: #374151;
+  }
+
+  .habit-item:hover { background-color: #374151; }
+  .habit-label { color: #F9FAFB; }
+  .habit-item.done .habit-label { color: #6B7280; }
+  .habit-checkbox { background-color: #374151; border-color: #4B5563; }
+  .habit-remove { color: #4B5563; &:hover { color: #F87171; background-color: #450a0a; } }
+
+  .card-footer { border-top-color: #374151; }
+  .count-badge { background-color: #374151; border-color: #4B5563; color: #9CA3AF; }
+  .btn-new-habit { color: #9CA3AF; border-color: #4B5563; &:hover { color: #34D399; border-color: #34D399; background-color: #064e3b; } }
+
+  .card {
+    background-color: #1F2937;
+    border-color: #374151;
+  }
+
+  .card-title { color: #F9FAFB; }
+  .card-subtitle { color: #9CA3AF; }
+
+  .bar-empty { background-color: #374151; }
+  .bar-chart::before {
+    background-image:
+      linear-gradient(#374151 1px, transparent 1px),
+      linear-gradient(#374151 1px, transparent 1px),
+      linear-gradient(#374151 1px, transparent 1px),
+      linear-gradient(#374151 1px, transparent 1px),
+      linear-gradient(#374151 1px, transparent 1px);
+  }
+  .bar-labels span { color: #6B7280; }
+  .bar-fill { background-color: #34D399; }
+
+  #streak-calendar {
+    .cal-title { color: #F9FAFB; }
+    .cal-prev, .cal-next { border-color: #374151; color: #9CA3AF; &:hover { background-color: #374151; color: #F9FAFB; } }
+    .cal-day-name { color: #6B7280; }
+    .cal-day { color: #9CA3AF; &:hover { background-color: #374151; } }
+    .cal-day.streak { background-color: #34D399; color: #111827; }
+    .cal-day.today { background-color: #F9FAFB; color: #111827; }
+  }
+
+  .modal-box {
+    background-color: #1F2937;
+    border-color: #374151;
+    h3 { color: #F9FAFB; }
+  }
+
+  .modal-box input {
+    background-color: #374151;
+    border-color: #4B5563;
+    color: #F9FAFB;
+    &:focus { border-color: #34D399; background-color: #1F2937; }
+    &::placeholder { color: #6B7280; }
+  }
+
+  .input-label { color: #F9FAFB; }
+  .modal-switch { color: #9CA3AF; a { color: #34D399; } }
+  .btn-cancel { color: #9CA3AF; border-color: #4B5563; &:hover { background-color: #374151; } }
+
+  .journal-section .journal-editor {
+    background-color: #1F2937;
+    border-color: #374151;
+  }
+
+  .journal-title-input {
+    color: #F9FAFB;
+    border-bottom-color: #374151;
+    &::placeholder { color: #4B5563; }
+  }
+
+  .journal-textarea {
+    color: #F9FAFB;
+    &::placeholder { color: #4B5563; }
+  }
+
+  .journal-editor-actions { border-top-color: #374151; }
+  .journal-empty { color: #6B7280; }
+
+  .journal-entry {
+    background-color: #1F2937;
+    border-color: #374151;
+    .entry-title { color: #F9FAFB; }
+    .entry-date { color: #6B7280; }
+    .entry-body { color: #9CA3AF; }
+    .btn-edit-entry { color: #9CA3AF; border-color: #4B5563; &:hover { background-color: #374151; color: #F9FAFB; } }
+    .btn-delete-entry { color: #9CA3AF; border-color: #4B5563; &:hover { color: #F87171; background-color: #450a0a; border-color: #7f1d1d; } }
+  }
+
+  .dark-toggle .dark-toggle-track { background-color: #374151; }
+  .dark-toggle input:checked ~ .dark-toggle-track { background-color: #34D399; }
+  .dark-toggle .dark-toggle-thumb { background-color: #F9FAFB; }
+
+  .footer {
+    border-top-color: #374151;
+    .footer-logo { color: #F9FAFB; }
+    .footer-tagline { color: #6B7280; }
+    .footer-col-title { color: #F9FAFB; }
+    .footer-col a { color: #6B7280; &:hover { color: #34D399; } }
+    .footer-bottom { border-top-color: #374151; span { color: #4B5563; } }
+  }
+}

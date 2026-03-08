@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>habitsight</title>
+    <link rel="icon" href="img/icon.ico">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <div class="logo">habitsight</div>
+      <label class="dark-toggle" title="Toggle dark mode">
+        <input type="checkbox" id="dark-toggle-input" onchange="toggleDarkMode(this.checked)">
+        <span class="dark-toggle-track">
+          <span class="dark-toggle-thumb">
+            <img class="icon-sun" src="img/icon-sun.png" alt="light mode" />
+            <img class="icon-moon" src="img/icon-moon.png" alt="dark mode" />
+          </span>
+        </span>
+      </label>
+    </div>
+
+    </div>
+
+    <!-- shown when logged out -->
+    <div class="nav-auth" id="nav-auth">
+      <button class="btn-login" onclick="openLoginModal()">Log in</button>
+      <button class="btn-signup" onclick="openSignupModal()">Sign up</button>
+    </div>
+
+    <!-- shown when logged in -->
+    <div class="nav-profile hidden" id="nav-profile">
+      <div class="profile-btn" onclick="toggleProfileMenu()">
+        <div class="avatar-icon">
+          <img src="img/profile-ico.png" alt="profileicon" width="40" height="40">
+        </div> 
+        <span class="profile-name" id="profile-name">John Doe</span>
+        <span class="caret"><img src="img/arrow/arrow-down.png" alt="arrowdown" width="8" height="8"></span>
+      </div>
+      <div class="profile-dropdown hidden" id="profile-dropdown">
+        <button class="danger" onclick="handleLogout()">Log out</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard">
+
+    <!-- LEFT: HABITS + JOURNAL -->
+    <div>
+      <h1>Your progress,<br><span class="green" id="today-date"></span></h1>
+
+      <div class="habits-card">
+        <ul id="habit-list">
+          <li class="habit-item">
+            <div class="habit-checkbox">
+              <svg viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="2,8 6,12 14,4"/>
+              </svg>
+            </div>
+            <span class="habit-label">Drink 8 cups of water</span>
+            <button class="habit-remove" title="Remove habit">✕</button>
+          </li>
+          <li class="habit-item">
+            <div class="habit-checkbox">
+              <svg viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="2,8 6,12 14,4"/>
+              </svg>
+            </div>
+            <span class="habit-label">Finish all IQ projects</span>
+            <button class="habit-remove" title="Remove habit">✕</button>
+          </li>
+          <li class="habit-item">
+            <div class="habit-checkbox">
+              <svg viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="2,8 6,12 14,4"/>
+              </svg>
+            </div>
+            <span class="habit-label">Sleep 8 hours</span>
+            <button class="habit-remove" title="Remove habit">✕</button>
+          </li>
+          <li class="habit-item">
+            <div class="habit-checkbox">
+              <svg viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="2,8 6,12 14,4"/>
+              </svg>
+            </div>
+            <span class="habit-label">Evening journal</span>
+            <button class="habit-remove" title="Remove habit">✕</button>
+          </li>
+        </ul>
+
+        <div class="card-footer">
+          <button class="btn-new-habit" onclick="openHabitModal()">+ New Habit</button>
+          <span class="count-badge" id="count-badge">0 / 4</span>
+        </div>
+      </div>
+
+      <!-- JOURNAL -->
+      <div class="journal-section">
+        <div class="journal-header">
+          <h2>Journal</h2>
+          <button class="btn-new-entry" onclick="openNewEntry()">+ New Entry</button>
+        </div>
+
+        <!-- Write / Edit view -->
+        <div class="journal-editor hidden" id="journal-editor">
+          <input type="text" class="journal-title-input" id="journal-title-input" placeholder="Entry title..." />
+          <textarea class="journal-textarea" id="journal-textarea" placeholder="Write your thoughts..."></textarea>
+          <div class="journal-editor-actions">
+            <button class="btn-cancel" onclick="cancelEntry()">Cancel</button>
+            <button class="btn-confirm" onclick="saveEntry()">Save Entry</button>
+          </div>
+        </div>
+
+        <!-- List of entries -->
+        <p class="journal-empty" id="journal-empty">No entries yet. Write your first one!</p>
+        <div class="journal-list" id="journal-list"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: INSIGHTS -->
+    <div>
+      <h2>Insights</h2>
+
+      <!-- FULLCALENDAR -->
+      <div class="card">
+        <div class="card-title">Streak Calendar</div>
+        <div id="streak-calendar"></div>
+      </div>
+
+      <!-- WEEKLY PROGRESS -->
+      <div class="card">
+        <div class="card-title">Weekly Progress</div>
+        <div class="card-subtitle">Last 7 days</div>
+        <div class="bar-chart" id="bar-chart"></div>
+        <div class="bar-labels">
+          <span>Sun</span><span>Mon</span><span>Tue</span>
+          <span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">habitsight</span>
+        <p class="footer-tagline">Build better habits, one day at a time. Never break the chain.</p>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-col">
+          <span class="footer-col-title">Support</span>
+          <a href="#">Help Center</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 HabitSight. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <!-- ADD HABIT MODAL -->
+  <div class="modal-bg" id="habit-modal">
+    <div class="modal-box">
+      <h3>Add New Habit</h3>
+      <input type="text" id="habit-input" placeholder="e.g. Read for 20 minutes" />
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeHabitModal()">Cancel</button>
+        <button class="btn-confirm" onclick="addHabit()">Add Habit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGIN MODAL -->
+  <div class="modal-bg" id="login-modal">
+    <div class="modal-box">
+      <h3>Log in</h3>
+      <label class="input-label">Email</label>
+      <input type="email" id="login-email" placeholder="you@example.com" />
+      <label class="input-label">Password</label>
+      <input type="password" id="login-password" placeholder="••••••••" />
+      <p class="modal-error hidden" id="login-error">Invalid email or password.</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeLoginModal()">Cancel</button>
+        <button class="btn-confirm" onclick="handleLogin()">Log in</button>
+      </div>
+      <p class="modal-switch">Don't have an account? <a href="#" onclick="switchToSignup()">Sign up</a></p>
+    </div>
+  </div>
+
+  <!-- SIGN UP MODAL -->
+  <div class="modal-bg" id="signup-modal">
+    <div class="modal-box">
+      <h3>Create account</h3>
+      <label class="input-label">Full name</label>
+      <input type="text" id="signup-name" placeholder="John Doe" />
+      <label class="input-label">Email</label>
+      <input type="email" id="signup-email" placeholder="you@example.com" />
+      <label class="input-label">Password</label>
+      <input type="password" id="signup-password" placeholder="••••••••" />
+      <p class="modal-error hidden" id="signup-error">Please fill in all fields.</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeSignupModal()">Cancel</button>
+        <button class="btn-confirm" onclick="handleSignup()">Sign up</button>
+      </div>
+      <p class="modal-switch">Already have an account? <a href="#" onclick="switchToLogin()">Log in</a></p>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
