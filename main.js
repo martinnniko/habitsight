@@ -1,4 +1,3 @@
-
 // Get today's date as YYYY-MM-DD
 function getToday() {
   var d = new Date();
@@ -448,7 +447,178 @@ function handleLogout() {
   document.getElementById("nav-profile").classList.add("hidden");
   document.getElementById("nav-auth").classList.remove("hidden");
   document.getElementById("profile-dropdown").classList.add("hidden");
+  sessionStorage.removeItem("habitsight_session");
+  gateReset();
+  document.getElementById("auth-gate").classList.remove("dismissed");
 }
+
+// ── Auth Gate ─────────────────────────────────
+
+function gateShowPanel(panelId) {
+  var panels = ["gate-login-panel", "gate-signup-panel", "gate-forgot-panel", "gate-reset-panel"];
+  for (var i = 0; i < panels.length; i++) {
+    document.getElementById(panels[i]).classList.add("hidden");
+  }
+  document.getElementById(panelId).classList.remove("hidden");
+}
+
+function gateShowSignup() {
+  gateShowPanel("gate-signup-panel");
+  document.getElementById("gate-signup-name").focus();
+  return false;
+}
+
+function gateShowLogin() {
+  gateShowPanel("gate-login-panel");
+  document.getElementById("gate-login-email").focus();
+  return false;
+}
+
+function gateShowForgot() {
+  gateShowPanel("gate-forgot-panel");
+  document.getElementById("gate-forgot-email").focus();
+  return false;
+}
+
+function gateReset() {
+  var ids = [
+    "gate-login-email", "gate-login-password",
+    "gate-signup-name", "gate-signup-email", "gate-signup-password",
+    "gate-forgot-email", "gate-reset-code", "gate-reset-password"
+  ];
+  for (var i = 0; i < ids.length; i++) {
+    var el = document.getElementById(ids[i]);
+    if (el) el.value = "";
+  }
+  var errors = document.querySelectorAll(".gate-error");
+  for (var i = 0; i < errors.length; i++) {
+    errors[i].classList.add("hidden");
+  }
+  gateShowPanel("gate-login-panel");
+}
+
+function gateSetError(id, msg) {
+  var el = document.getElementById(id);
+  el.textContent = msg;
+  el.classList.remove("hidden");
+}
+
+function gateClearError(id) {
+  document.getElementById(id).classList.add("hidden");
+}
+
+function dismissGate(name) {
+  document.getElementById("auth-gate").classList.add("dismissed");
+  setLoggedIn(name);
+}
+
+function gateLogin() {
+  var email    = document.getElementById("gate-login-email").value.trim();
+  var password = document.getElementById("gate-login-password").value;
+  gateClearError("gate-login-error");
+
+  var found = null;
+  for (var i = 0; i < users.length; i++) {
+    if (users[i].email === email && users[i].password === password) {
+      found = users[i]; break;
+    }
+  }
+  if (!found) { gateSetError("gate-login-error", "Invalid email or password."); return; }
+
+  sessionStorage.setItem("habitsight_session", JSON.stringify({ name: found.name }));
+  dismissGate(found.name);
+}
+
+function gateSignup() {
+  var name     = document.getElementById("gate-signup-name").value.trim();
+  var email    = document.getElementById("gate-signup-email").value.trim();
+  var password = document.getElementById("gate-signup-password").value;
+  gateClearError("gate-signup-error");
+
+  if (!name || !email || !password) {
+    gateSetError("gate-signup-error", "Please fill in all fields."); return;
+  }
+  for (var i = 0; i < users.length; i++) {
+    if (users[i].email === email) {
+      gateSetError("gate-signup-error", "An account with this email already exists."); return;
+    }
+  }
+
+  users.push({ name: name, email: email, password: password });
+  sessionStorage.setItem("habitsight_session", JSON.stringify({ name: name }));
+  dismissGate(name);
+}
+
+// Simulated reset: generate a 6-digit code and store it in memory
+var _resetCode = null;
+var _resetEmail = null;
+
+function gateSendReset() {
+  var email = document.getElementById("gate-forgot-email").value.trim();
+  gateClearError("gate-forgot-error");
+
+  var found = null;
+  for (var i = 0; i < users.length; i++) {
+    if (users[i].email === email) { found = users[i]; break; }
+  }
+  if (!found) {
+    gateSetError("gate-forgot-error", "No account found with that email."); return;
+  }
+
+  // Generate a 6-digit code (simulated — shown in the UI since there's no email backend)
+  _resetCode  = String(Math.floor(100000 + Math.random() * 900000));
+  _resetEmail = email;
+
+  document.getElementById("gate-reset-hint").textContent =
+    "A reset code has been sent to " + email + ". (Demo: your code is " + _resetCode + ")";
+  gateShowPanel("gate-reset-panel");
+  document.getElementById("gate-reset-code").focus();
+}
+
+function gateResetPassword() {
+  var code     = document.getElementById("gate-reset-code").value.trim();
+  var password = document.getElementById("gate-reset-password").value;
+  gateClearError("gate-reset-error");
+
+  if (!code || !password) {
+    gateSetError("gate-reset-error", "Please fill in both fields."); return;
+  }
+  if (code !== _resetCode) {
+    gateSetError("gate-reset-error", "Incorrect reset code. Try again."); return;
+  }
+  if (password.length < 6) {
+    gateSetError("gate-reset-error", "Password must be at least 6 characters."); return;
+  }
+
+  for (var i = 0; i < users.length; i++) {
+    if (users[i].email === _resetEmail) {
+      users[i].password = password; break;
+    }
+  }
+
+  _resetCode  = null;
+  _resetEmail = null;
+  gateReset();
+  // Show a brief success message on the login panel
+  var hint = document.getElementById("gate-login-success");
+  hint.classList.remove("hidden");
+  setTimeout(function() { hint.classList.add("hidden"); }, 4000);
+}
+
+// Enter-key support
+function gateEnterKey(e, fn) { if (e.key === "Enter") fn(); }
+
+// Restore session if still open
+(function() {
+  var saved = sessionStorage.getItem("habitsight_session");
+  if (saved) {
+    var user = JSON.parse(saved);
+    document.getElementById("auth-gate").classList.add("dismissed");
+    setLoggedIn(user.name);
+  } else {
+    document.getElementById("auth-gate").classList.remove("dismissed");
+  }
+})();
 
 // close dropdown when clicking outside
 document.addEventListener("click", function (e) {

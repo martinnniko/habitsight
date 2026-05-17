@@ -901,6 +901,206 @@ h1, h2 {
   background-color: #FEF2F2;
 }
 
+.auth-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background-color: #F8FAFC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+.auth-gate.dismissed {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.auth-gate-inner {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.auth-logo {
+  font-family: "Offside", sans-serif;
+  font-size: 42px;
+  color: #1F2937;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+
+.auth-tagline {
+  font-size: 14px;
+  color: #6B7280;
+  margin-bottom: 36px;
+  text-align: center;
+}
+
+.auth-panel {
+  width: 100%;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  animation: auth-slide-up 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.auth-panel .input-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1F2937;
+  margin-bottom: 6px;
+  margin-top: 14px;
+}
+.auth-panel input[type=email],
+.auth-panel input[type=password],
+.auth-panel input[type=text] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: "Inter", sans-serif;
+  color: #1F2937;
+  background: #F3F4F6;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+.auth-panel input[type=email]:focus,
+.auth-panel input[type=password]:focus,
+.auth-panel input[type=text]:focus {
+  border-color: #059669;
+  background: #FFFFFF;
+}
+.auth-panel input[type=email]::-moz-placeholder, .auth-panel input[type=password]::-moz-placeholder, .auth-panel input[type=text]::-moz-placeholder {
+  color: #E5E7EB;
+}
+.auth-panel input[type=email]::placeholder,
+.auth-panel input[type=password]::placeholder,
+.auth-panel input[type=text]::placeholder {
+  color: #E5E7EB;
+}
+
+@keyframes auth-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.auth-heading {
+  font-family: "PlusJakartaSans", sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.auth-panel-desc {
+  font-size: 13px;
+  color: #6B7280;
+  text-align: center;
+  margin-bottom: 8px;
+  margin-top: -8px;
+  line-height: 1.5;
+}
+
+.auth-reset-hint {
+  font-size: 12px;
+  color: #059669;
+  background: #D1FAE5;
+  border: 1px solid #A7F3D0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 4px;
+}
+
+.auth-btn-primary {
+  width: 100%;
+  margin-top: 20px;
+  padding: 11px;
+  background-color: #059669;
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.15s, transform 0.1s;
+}
+.auth-btn-primary:hover {
+  background-color: #047857;
+}
+.auth-btn-primary:active {
+  transform: scale(0.98);
+}
+
+.auth-forgot-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.auth-forgot-link {
+  font-size: 12px;
+  color: #6B7280;
+  text-decoration: none;
+}
+.auth-forgot-link:hover {
+  color: #059669;
+  text-decoration: underline;
+}
+
+.auth-switch {
+  font-size: 13px;
+  color: #6B7280;
+  text-align: center;
+  margin-top: 18px;
+}
+.auth-switch a {
+  color: #059669;
+  font-weight: 500;
+  text-decoration: none;
+}
+.auth-switch a:hover {
+  text-decoration: underline;
+}
+
+.gate-error {
+  font-size: 13px;
+  color: #DC2626;
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: #FEF2F2;
+  border-radius: 8px;
+  border: 1px solid #FECACA;
+}
+
+.auth-success {
+  font-size: 13px;
+  color: #065F46;
+  padding: 8px 12px;
+  background: #D1FAE5;
+  border-radius: 8px;
+  border: 1px solid #A7F3D0;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
 body.dark {
   background-color: #111827;
   color: #F9FAFB;
@@ -1180,4 +1380,76 @@ body.dark .footer .footer-bottom {
 }
 body.dark .footer .footer-bottom span {
   color: #4B5563;
+}
+body.dark .auth-gate {
+  background-color: #111827;
+}
+body.dark .auth-logo {
+  color: #F9FAFB;
+}
+body.dark .auth-tagline {
+  color: #6B7280;
+}
+body.dark .auth-panel {
+  background-color: #1F2937;
+  border-color: #374151;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+body.dark .auth-panel .input-label {
+  color: #D1D5DB;
+}
+body.dark .auth-panel input[type=email],
+body.dark .auth-panel input[type=password],
+body.dark .auth-panel input[type=text] {
+  background: #374151;
+  border-color: #4B5563;
+  color: #F9FAFB;
+}
+body.dark .auth-panel input[type=email]:focus,
+body.dark .auth-panel input[type=password]:focus,
+body.dark .auth-panel input[type=text]:focus {
+  border-color: #34D399;
+  background: #1F2937;
+}
+body.dark .auth-panel input[type=email]::-moz-placeholder, body.dark .auth-panel input[type=password]::-moz-placeholder, body.dark .auth-panel input[type=text]::-moz-placeholder {
+  color: #6B7280;
+}
+body.dark .auth-panel input[type=email]::placeholder,
+body.dark .auth-panel input[type=password]::placeholder,
+body.dark .auth-panel input[type=text]::placeholder {
+  color: #6B7280;
+}
+body.dark .auth-heading {
+  color: #F9FAFB;
+}
+body.dark .auth-panel-desc {
+  color: #9CA3AF;
+}
+body.dark .auth-reset-hint {
+  background: #064E3B;
+  border-color: #065F46;
+  color: #6EE7B7;
+}
+body.dark .auth-btn-primary {
+  background-color: #059669;
+}
+body.dark .auth-btn-primary:hover {
+  background-color: #047857;
+}
+body.dark .auth-forgot-link {
+  color: #9CA3AF;
+}
+body.dark .auth-forgot-link:hover {
+  color: #34D399;
+}
+body.dark .auth-switch {
+  color: #9CA3AF;
+}
+body.dark .auth-switch a {
+  color: #34D399;
+}
+body.dark .auth-success {
+  background: #064E3B;
+  border-color: #065F46;
+  color: #6EE7B7;
 }/*# sourceMappingURL=main.css.map */
